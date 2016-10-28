@@ -1,0 +1,32 @@
+var Chann, flat, namen, chanArray, imagedir, nuts, colorArray, img;
+Dialog.create("");
+	Dialog.create("Select parameters");
+		Dialog.addNumber("how many channels to combine?",0,0,1,"channel/s");
+		Dialog.addString("Final image as a flat RGB?","yes");
+		Dialog.addString("Suffix for all images?","_");
+	Dialog.show();
+Chann = Dialog.getNumber();
+flat = Dialog.getString();
+namen = Dialog.getString();
+chanArray = newArray();
+colorArray = newArray();
+for (n=0;n<Chann;n++) {
+	imagedir = getDirectory("Choose folder with single channel " + (n+1));
+	chanArray = Array.concat(chanArray,imagedir);
+	channels = newArray("Green","Red","Blue","Cyan");
+	Dialog.create("");
+		Dialog.addChoice("Color for this channel",channels,"Green");
+	Dialog.show();
+	channel = Dialog.getChoice();
+	colorArray = Array.concat(colorArray,channel);
+}
+for (n=0;n<Chann;n++) {
+	nuts = getFileList(chanArray[n]);
+	for(i=0;i<nuts.length;i++) {
+		img = nuts[i];
+		open(chanArray[n] + img);
+		title = getTitle();
+		print(title);
+		close();
+	}
+}
